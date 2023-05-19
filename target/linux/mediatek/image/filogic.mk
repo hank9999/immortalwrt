@@ -256,6 +256,39 @@ define Device/qihoo_360-t7-ubootmod
 endef
 TARGET_DEVICES += qihoo_360-t7-ubootmod
 
+define Device/xiaomi_mi-router-wr30u-common
+  DEVICE_VENDOR := Xiaomi
+  DEVICE_DTS_DIR := ../dts
+  DEVICE_PACKAGES := kmod-mt7981-firmware mt7981-wo-firmware
+  UBINIZE_OPTS := -E 5
+  BLOCKSIZE := 128k
+  PAGESIZE := 2048
+  KERNEL_IN_UBI := 1
+  IMAGES += factory.bin
+  IMAGE/factory.bin := append-ubi | check-size $$$$(IMAGE_SIZE)
+  IMAGE/sysupgrade.bin := sysupgrade-tar | append-metadata
+  KERNEL = kernel-bin | lzma | \
+	fit lzma $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb
+  KERNEL_INITRAMFS = kernel-bin | lzma | \
+	fit lzma $$(KDIR)/image-$$(firstword $$(DEVICE_DTS)).dtb with-initrd
+endef
+
+define Device/xiaomi_mi-router-wr30u-stock
+  DEVICE_MODEL := Xiaomi Router WR30U (stock layout)
+  DEVICE_DTS := mt7981-xiaomi-mi-router-wr30u-stock
+  IMAGE_SIZE := 34816k
+  $(call Device/xiaomi_mi-router-wr30u-common)
+endef
+TARGET_DEVICES += xiaomi_mi-router-wr30u-stock
+
+define Device/xiaomi_mi-router-wr30u-ubootmod
+  DEVICE_MODEL := Xiaomi Router WR30U (modified U-Boot layout)
+  DEVICE_DTS := mt7981-xiaomi-mi-router-wr30u-ubootmod
+  IMAGE_SIZE := 114688k
+  $(call Device/xiaomi_mi-router-wr30u-common)
+endef
+TARGET_DEVICES += xiaomi_mi-router-wr30u-ubootmod
+
 define Device/tplink_tl-xdr-common
   DEVICE_VENDOR := TP-Link
   DEVICE_DTS_DIR := ../dts

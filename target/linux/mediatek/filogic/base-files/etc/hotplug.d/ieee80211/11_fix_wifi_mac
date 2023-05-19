@@ -41,6 +41,11 @@ case "$board" in
 		addr=$(macaddr_add $(cat /sys/class/net/eth0/address) 2)
 		[ "$PHYNBR" = "1" ] && macaddr_setbit $addr 6 > /sys${DEVPATH}/macaddress
 		;;
+	xiaomi,mi-router-wr30u-stock|\
+	xiaomi,mi-router-wr30u-ubootmod)
+                addr=$(macaddr_add $(cat /sys/class/net/eth0/address) 2)
+                [ "$PHYNBR" = "1" ] && macaddr_setbit $addr 6 > /sys${DEVPATH}/macaddress
+                ;;
 	tplink,tl-xdr4288|\
 	tplink,tl-xdr6086|\
 	tplink,tl-xdr6088)

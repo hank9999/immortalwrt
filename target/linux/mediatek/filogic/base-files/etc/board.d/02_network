@@ -25,6 +25,10 @@ mediatek_setup_interfaces()
 	qihoo,360-t7-ubootmod)
 		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3" wan
 		;;
+	xiaomi,mi-router-wr30u-stock|\
+	xiaomi,mi-router-wr30u-ubootmod)
+		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3" wan
+		;;
 	mediatek,mt7986a-rfb)
 		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3 lan4 lan6" "eth1 wan"
 		;;
@@ -74,6 +78,10 @@ mediatek_setup_macs()
 		wan_mac=$(macaddr_add $(cat /sys/class/net/eth0/address) 1)
 		label_mac=$wan_mac
 		;;
+        xiaomi,mi-router-wr30u-stock|\
+        xiaomi,mi-router-wr30u-ubootmod)
+		wan_mac=$(dd if=/dev/mtd2ro bs=1 count=256 2>/dev/null |grep "^ethaddr_wan=" | awk -F '=' '{print $2}')
+		lan_mac=$(dd if=/dev/mtd2ro bs=1 count=256 2>/dev/null |grep "^ethaddr=" | awk -F '=' '{print $2}')
 	xiaomi,redmi-router-ax6000|\
 	xiaomi,redmi-router-ax6000-stock|\
 	xiaomi,redmi-router-ax6000-ubootmod)
